@@ -101,7 +101,7 @@ yarn deploy:firestore # Deploy Firestore rules and indexes
 
 ## CI/CD
 
-Deployments are automated via Google Cloud Build. A Cloud Build trigger watches for changes to `packages/quin/**` on the `master` branch and automatically builds and deploys Quin when changes are detected.
+Deployments are automated via Google Cloud Build. See `cloudbuild.yaml` for configuration. A trigger is configured to automatically deploy Quin when changes are pushed to the `packages/quin/**` directory on the `master` branch.
 
 **What the CI/CD pipeline does:**
 

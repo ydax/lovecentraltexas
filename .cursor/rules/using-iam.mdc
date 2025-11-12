@@ -1,0 +1,31 @@
+---
+alwaysApply: false
+---
+
+# Using IAM
+
+When you need to modify IAM policies:
+
+1. modify the iam_policy.yaml file
+2. run the following command to apply the changes:
+
+```bash
+gcloud iam policies update-iam-policy iam_policy.yaml
+```
+
+3. verify the changes by running the following command:
+
+```bash
+gcloud iam policies get-iam-policy --project=lovecentraltexas
+```
+
+4. if the changes are not applied, check the logs for errors
+5. if the changes are applied, verify the changes by running the following command:
+
+```bash
+gcloud iam policies get-iam-policy --project=lovecentraltexas
+```
+
+---
+
+## alwaysApply: true
