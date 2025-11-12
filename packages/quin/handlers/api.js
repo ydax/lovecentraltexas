@@ -9,7 +9,7 @@ const {
 } = require("@modelcontextprotocol/sdk/server/sse.js");
 
 /**
- * @purpose Express handler with MCP server for Quin (LoveCentralTexas AI agent).
+ * @purpose Express handler with MCP server for Quin (Love Central Texas AI agent).
  * Provides SSE-based MCP endpoints for tool discovery and invocation.
  */
 

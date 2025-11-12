@@ -20,3 +20,7 @@ bindings:
       - serviceAccount:lovecentraltexas@appspot.gserviceaccount.com
       - serviceAccount:956360338882@cloudbuild.gserviceaccount.com
 
+  # Secret Manager permissions for Cloud Build
+  - role: roles/secretmanager.secretAccessor
+    members:
+      - serviceAccount:956360338882@cloudbuild.gserviceaccount.com
