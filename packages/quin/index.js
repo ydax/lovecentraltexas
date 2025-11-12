@@ -7,7 +7,7 @@ const { onRequest } = require("firebase-functions/v2/https");
 initializeApp();
 
 /**
- * @purpose Import the Express app with MCP server.
+ * @purpose Import the Express app with MCP server
  */
 const app = require("./handlers/api");
 
@@ -22,4 +22,3 @@ exports.quin = onRequest(
   },
   app
 );
-
