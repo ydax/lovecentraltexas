@@ -21,6 +21,9 @@ bindings:
       - serviceAccount:956360338882@cloudbuild.gserviceaccount.com
 
   # Secret Manager permissions for Cloud Build
+  # Note: Both the Cloud Build service account and Service Agent need access
+  # The Service Agent (service-PROJECT_NUMBER@gcp-sa-cloudbuild) is required for secret injection
   - role: roles/secretmanager.secretAccessor
     members:
       - serviceAccount:956360338882@cloudbuild.gserviceaccount.com
+      - serviceAccount:service-956360338882@gcp-sa-cloudbuild.iam.gserviceaccount.com
