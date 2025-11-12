@@ -461,3 +461,4 @@ fetch(
 - **Runtime**: Node.js 20
 - **Memory**: 1GiB
 - **Timeout**: 60 seconds
+# Test trigger - fixing IAM permissions
