@@ -1,0 +1,77 @@
+{
+  "folders": [
+    {
+      "path": "."
+    },
+    {
+      "path": "../davis"
+    }
+  ],
+  "settings": {
+    "workbench.colorCustomizations": {
+      "activityBar.activeBackground": "#8B0000",
+      "activityBar.activeBorder": "#FF0000",
+      "activityBar.background": "#5C0000",
+      "activityBar.border": "#8B0000",
+      "activityBar.foreground": "#FF6B6B",
+      "activityBar.inactiveForeground": "#CC6666",
+      "activityBarBadge.background": "#FF0000",
+      "activityBarBadge.foreground": "#FFFFFF",
+      "editor.background": "#1A0000",
+      "editor.foreground": "#FFE5E5",
+      "editorGroupHeader.tabsBackground": "#2D0000",
+      "editorGroupHeader.tabsBorder": "#8B0000",
+      "editorLineNumber.activeForeground": "#FF6B6B",
+      "editorLineNumber.foreground": "#8B5A5A",
+      "editor.selectionBackground": "#8B000066",
+      "editor.selectionHighlightBackground": "#5C0000",
+      "editorCursor.foreground": "#FF0000",
+      "editorWhitespace.foreground": "#4D0000",
+      "panel.background": "#1A0000",
+      "panel.border": "#8B0000",
+      "sideBar.background": "#1A0000",
+      "sideBar.border": "#8B0000",
+      "sideBar.foreground": "#FFE5E5",
+      "sideBarTitle.foreground": "#FF6B6B",
+      "statusBar.background": "#8B0000",
+      "statusBar.border": "#5C0000",
+      "statusBar.foreground": "#FFFFFF",
+      "statusBar.noFolderBackground": "#5C0000",
+      "statusBar.debuggingBackground": "#CC0000",
+      "tab.activeBackground": "#2D0000",
+      "tab.activeBorder": "#FF0000",
+      "tab.activeForeground": "#FF6B6B",
+      "tab.border": "#5C0000",
+      "tab.inactiveBackground": "#1A0000",
+      "tab.inactiveForeground": "#CC6666",
+      "titleBar.activeBackground": "#8B0000",
+      "titleBar.activeForeground": "#FFFFFF",
+      "titleBar.border": "#5C0000",
+      "titleBar.inactiveBackground": "#5C0000",
+      "titleBar.inactiveForeground": "#CC6666"
+    },
+    "editor.tokenColorCustomizations": {
+      "textMateRules": [
+        {
+          "scope": "keyword",
+          "settings": {
+            "foreground": "#FF6B6B"
+          }
+        },
+        {
+          "scope": "string",
+          "settings": {
+            "foreground": "#FFAAAA"
+          }
+        },
+        {
+          "scope": "comment",
+          "settings": {
+            "foreground": "#8B5A5A",
+            "fontStyle": "italic"
+          }
+        }
+      ]
+    }
+  }
+}

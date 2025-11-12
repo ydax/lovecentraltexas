@@ -1,0 +1,22 @@
+{
+  "name": "centraltexas",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "app:build": "yarn workspace app run build",
+    "app:dev": "yarn workspace app run dev",
+    "app:start": "yarn workspace app run start",
+    "agent:build": "yarn workspace agent run build",
+    "agent:deploy": "yarn workspace agent run deploy",
+    "agent:serve": "yarn workspace agent run serve",
+    "deploy": "firebase deploy --project lovecentraltexas",
+    "deploy:agent": "firebase deploy --only functions --project lovecentraltexas",
+    "deploy:app": "firebase deploy --only hosting --project lovecentraltexas",
+    "deploy:firestore": "firebase deploy --only firestore --project lovecentraltexas"
+  },
+  "devDependencies": {},
+  "dependencies": {}
+}
