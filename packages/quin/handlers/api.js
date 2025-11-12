@@ -9,7 +9,7 @@ const {
 } = require("@modelcontextprotocol/sdk/server/sse.js");
 
 /**
- * @purpose Express handler with MCP server for the Central Texas AI quin.
+ * @purpose Express handler with MCP server for Quin (LoveCentralTexas AI agent).
  * Provides SSE-based MCP endpoints for tool discovery and invocation.
  */
 
@@ -26,9 +26,7 @@ try {
     firebasePlugin = null;
   }
 } catch (error) {
-  console.log(
-    "[api] Firebase plugin not available, using Admin SDK only"
-  );
+  console.log("[api] Firebase plugin not available, using Admin SDK only");
 }
 
 const plugins = [googleAI({ apiKey: process.env.GEMINI_API_KEY })];
@@ -133,4 +131,3 @@ app.use("*", (req, res) => {
 });
 
 module.exports = app;
-

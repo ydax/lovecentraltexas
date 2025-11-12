@@ -1,6 +1,6 @@
 # Love Central Texas
 
-A yarn workspace monorepo containing a NextJS React app and a Genkit/MCP AI quin, both deployed on Firebase.
+A yarn workspace monorepo containing a NextJS React app and Quin (a Genkit/MCP AI agent), both deployed on Firebase.
 
 ## Project Information
 
@@ -11,7 +11,7 @@ A yarn workspace monorepo containing a NextJS React app and a Genkit/MCP AI quin
 ## Repository Structure
 
 - `packages/app` - NextJS React application with Material UI v4
-- `packages/quin` - Genkit/MCP server deployed as Firebase Cloud Functions v2
+- `packages/quin` - Quin AI agent (Genkit/MCP server) deployed as Firebase Cloud Functions v2
 
 ## Prerequisites
 
@@ -97,7 +97,7 @@ yarn deploy:firestore # Deploy Firestore rules and indexes
 - **Authentication:** Email-based passwordless authentication
 - **Firestore:** NoSQL database
 - **Hosting:** NextJS app hosting
-- **Cloud Functions:** Genkit/MCP quin (Node.js 20)
+- **Cloud Functions:** Quin AI agent (Genkit/MCP server, Node.js 20)
 
 ## CI/CD
 
@@ -114,11 +114,32 @@ Deployments are automated via Google Cloud Build. See `cloudbuild.yaml` for conf
 
 ### Quin (packages/quin)
 
-- Firebase Cloud Functions v2
-- Genkit AI framework
-- MCP (Model Context Protocol) server
-- Express.js with SSE transport
-- Google Gemini AI integration
+Quin is the AI agent that exposes tools via the Model Context Protocol (MCP). It enables AI agents to discover and invoke tools that interact with Love Central Texas services and data.
+
+**Key Components:**
+
+- Firebase Cloud Functions v2 (Node.js 20 runtime)
+- Genkit AI framework for tool definition and management
+- MCP (Model Context Protocol) server for AI agent communication
+- Express.js with Server-Sent Events (SSE) transport
+- Google Gemini AI integration via Genkit
+
+**Architecture:**
+
+- `index.js` - Cloud Function entry point, exports `quin` function
+- `handlers/api.js` - Express app with MCP server setup and route handlers
+- `tools/` - Directory containing Genkit tool definitions (e.g., `helloTools.js`)
+
+**How It Works:**
+
+1. Tools are defined using Genkit's `ai.defineTool()` method with Zod schemas
+2. Tools are registered in `handlers/api.js` with the Genkit AI instance
+3. MCP server automatically discovers all registered tools
+4. AI agents connect via `GET /mcp/sse` to discover available tools
+5. Agents invoke tools via `POST /mcp/messages` with tool name and parameters
+6. Tools execute and return results via MCP protocol
+
+**For detailed information about working with Quin, see:** [`packages/quin/README.md`](packages/quin/README.md)
 
 ## Coding Guidelines
 
