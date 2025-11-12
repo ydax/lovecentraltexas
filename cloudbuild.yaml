@@ -1,57 +1,34 @@
 steps:
-  # Install dependencies for the entire workspace
-  - name: 'node:20'
-    entrypoint: yarn
-    args: ['install', '--frozen-lockfile']
-    id: 'install-dependencies'
+  # Install dependencies for quin
+  - name: "node:20"
+    entrypoint: "bash"
+    id: "Install Dependencies"
+    args:
+      - "-c"
+      - |
+        cd packages/quin
+        yarn install --frozen-lockfile --network-timeout 300000
 
   # Build quin (Cloud Functions)
-  - name: 'node:20'
-    entrypoint: yarn
-    args: ['workspace', 'quin', 'build']
-    id: 'build-quin'
-    waitFor: ['install-dependencies']
-
-  # Build the app (NextJS)
-  - name: 'node:20'
-    entrypoint: yarn
-    args: ['workspace', 'app', 'build']
-    id: 'build-app'
-    waitFor: ['install-dependencies']
-
-  # Deploy Firestore rules and indexes
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: bash
+  - name: "node:20"
+    entrypoint: "bash"
+    id: "Build Quin"
     args:
-      - '-c'
+      - "-c"
       - |
-        curl -sL https://firebase.tools | bash
-        firebase deploy --only firestore --project lovecentraltexas --non-interactive
-    id: 'deploy-firestore'
-    waitFor: ['install-dependencies']
+        cd packages/quin
+        yarn build
 
   # Deploy Cloud Functions (quin)
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: bash
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    id: "Deploy Quin Functions"
+    entrypoint: "bash"
     args:
-      - '-c'
+      - "-c"
       - |
         curl -sL https://firebase.tools | bash
-        firebase deploy --only functions --project lovecentraltexas --non-interactive
-    id: 'deploy-functions'
-    waitFor: ['build-quin']
+        firebase deploy --only functions --project lovecentraltexas --non-interactive --force
     secretEnv: ['GEMINI_API_KEY']
-
-  # Deploy Hosting (app)
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: bash
-    args:
-      - '-c'
-      - |
-        curl -sL https://firebase.tools | bash
-        firebase deploy --only hosting --project lovecentraltexas --non-interactive
-    id: 'deploy-hosting'
-    waitFor: ['build-app']
 
 # Secret configuration for Gemini API key
 availableSecrets:
@@ -64,6 +41,5 @@ timeout: '1800s'
 
 # Build options
 options:
-  machineType: 'E2_HIGHCPU_8'
   logging: CLOUD_LOGGING_ONLY
 
