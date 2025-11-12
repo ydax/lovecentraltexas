@@ -1,0 +1,9 @@
+name: quin-trigger
+github:
+  owner: ydax
+  name: lovecentraltexas
+  push:
+    branch: ^master$
+filename: cloudbuild.yaml
+includedFiles:
+  - packages/quin/**

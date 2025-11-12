@@ -12,10 +12,10 @@ initializeApp();
 const app = require("./handlers/api");
 
 /**
- * @purpose Main agent API endpoint with MCP server.
+ * @purpose Main quin API endpoint with MCP server.
  * Deployed as a Cloud Function with Node.js 20 runtime.
  */
-exports.agent = onRequest(
+exports.quin = onRequest(
   {
     memory: "1GiB",
     timeoutSeconds: 60,

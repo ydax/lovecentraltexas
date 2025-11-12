@@ -1,7 +1,7 @@
 {
   "functions": [
     {
-      "source": "packages/agent",
+      "source": "packages/quin",
       "codebase": "default",
       "runtime": "nodejs20",
       "ignore": [

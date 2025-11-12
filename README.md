@@ -1,6 +1,6 @@
 # Love Central Texas
 
-A yarn workspace monorepo containing a NextJS React app and a Genkit/MCP AI agent, both deployed on Firebase.
+A yarn workspace monorepo containing a NextJS React app and a Genkit/MCP AI quin, both deployed on Firebase.
 
 ## Project Information
 
@@ -11,7 +11,7 @@ A yarn workspace monorepo containing a NextJS React app and a Genkit/MCP AI agen
 ## Repository Structure
 
 - `packages/app` - NextJS React application with Material UI v4
-- `packages/agent` - Genkit/MCP server deployed as Firebase Cloud Functions v2
+- `packages/quin` - Genkit/MCP server deployed as Firebase Cloud Functions v2
 
 ## Prerequisites
 
@@ -37,9 +37,9 @@ yarn install
 cp packages/app/.env.local.example packages/app/.env.local
 # Edit packages/app/.env.local with your Firebase config
 
-# For the agent
-cp packages/agent/.env.example packages/agent/.env
-# Edit packages/agent/.env with your GEMINI_API_KEY
+# For quin
+cp packages/quin/.env.example packages/quin/.env
+# Edit packages/quin/.env with your GEMINI_API_KEY
 ```
 
 3. Login to Firebase:
@@ -56,10 +56,10 @@ Run the NextJS app locally:
 yarn app:dev
 ```
 
-Serve the agent functions locally:
+Serve quin functions locally:
 
 ```bash
-yarn agent:serve
+yarn quin:serve
 ```
 
 ### Building
@@ -70,10 +70,10 @@ Build the NextJS app:
 yarn app:build
 ```
 
-Build the agent functions:
+Build quin functions:
 
 ```bash
-yarn agent:build
+yarn quin:build
 ```
 
 ### Deployment
@@ -88,7 +88,7 @@ Deploy specific services:
 
 ```bash
 yarn deploy:app      # Deploy hosting only
-yarn deploy:agent    # Deploy functions only
+yarn deploy:quin      # Deploy functions only
 yarn deploy:firestore # Deploy Firestore rules and indexes
 ```
 
@@ -97,7 +97,7 @@ yarn deploy:firestore # Deploy Firestore rules and indexes
 - **Authentication:** Email-based passwordless authentication
 - **Firestore:** NoSQL database
 - **Hosting:** NextJS app hosting
-- **Cloud Functions:** Genkit/MCP agent (Node.js 20)
+- **Cloud Functions:** Genkit/MCP quin (Node.js 20)
 
 ## CI/CD
 
@@ -112,7 +112,7 @@ Deployments are automated via Google Cloud Build. See `cloudbuild.yaml` for conf
 - Firebase client SDK
 - Passwordless email authentication
 
-### Agent (packages/agent)
+### Quin (packages/quin)
 
 - Firebase Cloud Functions v2
 - Genkit AI framework

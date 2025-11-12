@@ -9,7 +9,7 @@ const {
 } = require("@modelcontextprotocol/sdk/server/sse.js");
 
 /**
- * @purpose Express handler with MCP server for the Central Texas AI agent.
+ * @purpose Express handler with MCP server for the Central Texas AI quin.
  * Provides SSE-based MCP endpoints for tool discovery and invocation.
  */
 
@@ -50,7 +50,7 @@ const { sayHello } = require("../tools/helloTools");
 sayHello(ai); // Register the tool with the ai instance
 
 // Create MCP server - it auto-discovers all registered tools
-const mcp = mcpServer(ai, { name: "centraltexas-agent", version: "1.0.0" });
+const mcp = mcpServer(ai, { name: "centraltexas-quin", version: "1.0.0" });
 
 // Create Express app
 const app = express();
@@ -98,7 +98,7 @@ app.post("/mcp/messages", (req, res) => {
 app.get("/hello", (req, res) => {
   console.log("[api] Health check request");
   res.json({
-    message: "Love Central Texas Agent is running",
+    message: "Love Central Texas Quin is running",
     project: "lovecentraltexas",
     version: "1.0.0",
   });
@@ -109,7 +109,7 @@ app.get("/hello", (req, res) => {
  */
 app.get("/", (req, res) => {
   res.json({
-    message: "Love Central Texas Agent",
+    message: "Love Central Texas Quin",
     endpoints: {
       health: "GET /hello",
       mcp_sse: "GET /mcp/sse",

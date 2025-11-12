@@ -27,7 +27,7 @@ centraltexas/
 │   └── public/
 │       └── favicon.svg              ✅ Icon
 │
-└── packages/agent/                  ✅ Genkit/MCP Agent
+└── packages/quin/                   ✅ Genkit/MCP Quin
     ├── package.json
     ├── index.js                     ✅ Cloud Function entry
     ├── handlers/
@@ -57,7 +57,7 @@ NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=956360338882
 NEXT_PUBLIC_FIREBASE_APP_ID=your-app-id-here
 ```
 
-**For the Agent (packages/agent/.env):**
+**For Quin (packages/quin/.env):**
 ```bash
 GEMINI_API_KEY=your-gemini-api-key-here
 ```
@@ -77,11 +77,11 @@ yarn app:dev
 # Opens at http://localhost:3000
 ```
 
-**Test the Agent:**
+**Test Quin:**
 ```bash
-cd packages/agent
+cd packages/quin
 firebase emulators:start --only functions
-# Agent available at http://localhost:5001/lovecentraltexas/us-central1/agent
+# Quin available at http://localhost:5001/lovecentraltexas/us-central1/quin
 ```
 
 ### 5. Deploy to Firebase
@@ -95,7 +95,7 @@ yarn deploy
 **Or deploy individually:**
 ```bash
 yarn deploy:app         # Deploy hosting
-yarn deploy:agent       # Deploy functions
+yarn deploy:quin        # Deploy functions
 yarn deploy:firestore   # Deploy Firestore rules
 ```
 
@@ -119,7 +119,7 @@ yarn deploy:firestore   # Deploy Firestore rules
 - ✅ Alphabetized imports and properties
 - ✅ Hello world page with user info display
 
-### Agent Features
+### Quin Features
 - ✅ Firebase Cloud Functions v2 (Node.js 20)
 - ✅ Genkit AI framework
 - ✅ MCP server with SSE transport
@@ -134,11 +134,11 @@ yarn deploy:firestore   # Deploy Firestore rules
 - ✅ IAM policy management
 - ✅ Yarn workspace monorepo
 
-## Testing the Agent MCP Server
+## Testing the Quin MCP Server
 
-Once deployed, the agent will be available at:
+Once deployed, quin will be available at:
 ```
-https://us-central1-lovecentraltexas.cloudfunctions.net/agent
+https://us-central1-lovecentraltexas.cloudfunctions.net/quin
 ```
 
 **Endpoints:**
