@@ -4,9 +4,6 @@ const { genkit } = require("genkit");
 const { googleAI } = require("@genkit-ai/google-genai");
 const { getApps, initializeApp } = require("firebase-admin/app");
 const { mcpServer } = require("genkitx-mcp");
-const {
-  SSEServerTransport,
-} = require("@modelcontextprotocol/sdk/server/sse.js");
 
 /**
  * @purpose Express handler with MCP server for Quin (Love Central Texas AI agent).
@@ -67,15 +64,24 @@ let transport = null;
  * @purpose SSE endpoint - establishes MCP connection.
  * AI agents connect here to discover available tools.
  */
-app.get("/mcp/sse", (req, res) => {
+app.get("/mcp/sse", async (req, res) => {
   console.log("[api] MCP: Establishing SSE connection");
-  transport = new SSEServerTransport("/mcp/messages", res);
-  mcp.server.connect(transport);
+  try {
+    // Dynamic import for ES module
+    const { SSEServerTransport } = await import(
+      "@modelcontextprotocol/sdk/server/sse.js"
+    );
+    transport = new SSEServerTransport("/mcp/messages", res);
+    mcp.server.connect(transport);
 
-  req.on("close", () => {
-    console.log("[api] MCP: SSE connection closed");
-    transport = null;
-  });
+    req.on("close", () => {
+      console.log("[api] MCP: SSE connection closed");
+      transport = null;
+    });
+  } catch (error) {
+    console.error("[api] MCP: Error establishing SSE connection:", error);
+    res.status(500).json({ error: "Failed to establish SSE connection" });
+  }
 });
 
 /**
