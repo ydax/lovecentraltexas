@@ -101,20 +101,17 @@ yarn deploy:firestore # Deploy Firestore rules and indexes
 
 ## CI/CD
 
-Deployments are automated via Google Cloud Build. See `cloudbuild.yaml` for configuration. A trigger is configured to automatically deploy Quin when changes are pushed to the `packages/quin/**` directory on the `master` branch.
+Deployments are automated via Google Cloud Build. See `cloudbuild.yaml` for configuration.
 
-**What the CI/CD pipeline does:**
+### Cloud Build Trigger
 
-1. Installs all dependencies
+A Cloud Build trigger is configured to automatically deploy Quin when changes are pushed to `packages/quin/**` on the `master` branch. The trigger runs the `cloudbuild.yaml` build configuration, which:
+
+1. Installs all workspace dependencies
 2. Builds the quin workspace
 3. Deploys Quin as a Firebase Cloud Function
-4. Uses `GEMINI_API_KEY` from Google Secret Manager
 
-**Configuration:**
-
-- Build configuration: `cloudbuild.yaml`
-- Trigger: Watches `packages/quin/**` on `master` branch
-- Secret: `GEMINI_API_KEY` stored in Secret Manager
+The `GEMINI_API_KEY` is automatically injected from Google Secret Manager during deployment.
 
 **View build status:**
 

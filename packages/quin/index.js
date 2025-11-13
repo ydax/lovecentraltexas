@@ -1,13 +1,8 @@
-const { initializeApp } = require("firebase-admin/app");
 const { onRequest } = require("firebase-functions/v2/https");
 
 /**
- * @purpose Initialize Firebase Admin SDK once at module load.
- */
-initializeApp();
-
-/**
  * @purpose Import the Express app with MCP server.
+ * Firebase Admin SDK is initialized by the Genkit Firebase plugin in handlers/api.js.
  */
 const app = require("./handlers/api");
 

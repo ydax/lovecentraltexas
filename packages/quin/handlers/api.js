@@ -2,7 +2,7 @@ const cors = require("cors");
 const express = require("express");
 const { genkit } = require("genkit");
 const { googleAI } = require("@genkit-ai/google-genai");
-const { initializeApp } = require("firebase-admin/app");
+const { getApps, initializeApp } = require("firebase-admin/app");
 const { mcpServer } = require("genkitx-mcp");
 const {
   SSEServerTransport,
@@ -13,8 +13,11 @@ const {
  * Provides SSE-based MCP endpoints for tool discovery and invocation.
  */
 
-// Initialize Firebase (done once at module load)
-initializeApp();
+// Initialize Firebase Admin SDK if not already initialized
+if (!getApps().length) {
+  initializeApp();
+  console.log("[api] Firebase Admin SDK initialized");
+}
 
 // Conditionally load firebase plugin if available
 let firebasePlugin = null;
