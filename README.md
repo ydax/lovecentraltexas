@@ -78,6 +78,8 @@ yarn quin:build
 
 ### Deployment
 
+**Note:** Quin is automatically deployed via CI/CD when changes are pushed to `packages/quin/**` on the `master` branch. Manual deployment is typically only needed for local testing or emergency rollbacks.
+
 Deploy everything:
 
 ```bash
@@ -88,7 +90,7 @@ Deploy specific services:
 
 ```bash
 yarn deploy:app      # Deploy hosting only
-yarn deploy:quin      # Deploy functions only
+yarn deploy:quin      # Deploy functions only (manual - CI/CD handles this automatically)
 yarn deploy:firestore # Deploy Firestore rules and indexes
 ```
 
@@ -103,15 +105,17 @@ yarn deploy:firestore # Deploy Firestore rules and indexes
 
 Deployments are automated via Google Cloud Build. See `cloudbuild.yaml` for configuration.
 
-### Cloud Build Trigger
+### Cloud Build Trigger for Quin
 
-A Cloud Build trigger is configured to automatically deploy Quin when changes are pushed to `packages/quin/**` on the `master` branch. The trigger runs the `cloudbuild.yaml` build configuration, which:
+**Quin is deployed automatically through CI/CD.** A Cloud Build trigger is configured to automatically deploy Quin when changes are pushed to `packages/quin/**` on the `master` branch. The trigger runs the `cloudbuild.yaml` build configuration, which:
 
 1. Installs all workspace dependencies
 2. Builds the quin workspace
 3. Deploys Quin as a Firebase Cloud Function
 
 The `GEMINI_API_KEY` is automatically injected from Google Secret Manager during deployment.
+
+**Important:** When you push changes to `packages/quin/**`, the CI/CD pipeline will automatically build and deploy Quin. No manual deployment step is required.
 
 **View build status:**
 
