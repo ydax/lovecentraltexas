@@ -20,6 +20,12 @@ steps:
       - |
         curl -sL https://firebase.tools | bash
         export PATH="$$PATH:/root/.local/bin"
+        if [ -z "$$GEMINI_API_KEY" ]; then
+          echo "GEMINI_API_KEY secret not available for deployment" >&2
+          exit 1
+        fi
+        export GEMINI_API_KEY="$$GEMINI_API_KEY"
+        export GOOGLE_API_KEY="$$GEMINI_API_KEY"
         export FIREBASE_TOKEN=$$(gcloud auth print-access-token)
         firebase deploy --only functions --project lovecentraltexas --non-interactive
     id: "deploy-functions"
