@@ -10,7 +10,7 @@ const { mcpServer } = require("genkitx-mcp");
  * Provides SSE-based MCP endpoints for tool discovery and invocation.
  */
 
-// Initialize Firebase Admin SDK if not already initialized
+// Initialize Firebase Admin SDK if not already initialized.
 if (!getApps().length) {
   initializeApp();
   console.log("[api] Firebase Admin SDK initialized");
