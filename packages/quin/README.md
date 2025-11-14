@@ -462,3 +462,4 @@ fetch(
 - **Memory**: 1GiB
 - **Timeout**: 60 seconds
 # Test trigger - fixing IAM permissions
+# Test comment for CI/CD trigger
