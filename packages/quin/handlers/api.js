@@ -16,39 +16,56 @@ if (!getApps().length) {
   console.log("[api] Firebase Admin SDK initialized");
 }
 
-// Conditionally load firebase plugin if available
-let firebasePlugin = null;
-try {
-  const firebaseModule = require("@genkit-ai/firebase");
-  firebasePlugin =
-    firebaseModule.firebase || firebaseModule.default || firebaseModule;
-  if (typeof firebasePlugin !== "function") {
-    firebasePlugin = null;
+// Lazy initialization of Genkit and MCP server
+// This prevents errors during Firebase deployment analysis when GEMINI_API_KEY isn't available yet
+let ai = null;
+let mcp = null;
+
+/**
+ * @purpose Initialize Genkit and MCP server on first use.
+ * This deferred initialization prevents deployment failures when environment variables aren't set.
+ */
+function initializeGenkitIfNeeded() {
+  if (ai) return; // Already initialized
+
+  console.log("[api] Initializing Genkit with Google Gemini");
+
+  // Conditionally load firebase plugin if available
+  let firebasePlugin = null;
+  try {
+    const firebaseModule = require("@genkit-ai/firebase");
+    firebasePlugin =
+      firebaseModule.firebase || firebaseModule.default || firebaseModule;
+    if (typeof firebasePlugin !== "function") {
+      firebasePlugin = null;
+    }
+  } catch (error) {
+    console.log("[api] Firebase plugin not available, using Admin SDK only");
   }
-} catch (error) {
-  console.log("[api] Firebase plugin not available, using Admin SDK only");
+
+  const plugins = [googleAI({ apiKey: process.env.GEMINI_API_KEY })];
+
+  // Add firebase plugin if available
+  if (firebasePlugin) {
+    plugins.push(firebasePlugin());
+  }
+
+  // Initialize Genkit
+  ai = genkit({
+    plugins,
+    logLevel: "debug",
+    enableTracingAndMetrics: true,
+  });
+
+  // Import and register tools
+  const { sayHello } = require("../tools/helloTools");
+  sayHello(ai); // Register the tool with the ai instance
+
+  // Create MCP server - it auto-discovers all registered tools
+  mcp = mcpServer(ai, { name: "centraltexas-quin", version: "1.0.0" });
+
+  console.log("[api] Genkit and MCP server initialized successfully");
 }
-
-const plugins = [googleAI({ apiKey: process.env.GEMINI_API_KEY })];
-
-// Add firebase plugin if available
-if (firebasePlugin) {
-  plugins.push(firebasePlugin());
-}
-
-// Initialize Genkit
-const ai = genkit({
-  plugins,
-  logLevel: "debug",
-  enableTracingAndMetrics: true,
-});
-
-// Import and register tools
-const { sayHello } = require("../tools/helloTools");
-sayHello(ai); // Register the tool with the ai instance
-
-// Create MCP server - it auto-discovers all registered tools
-const mcp = mcpServer(ai, { name: "centraltexas-quin", version: "1.0.0" });
 
 // Create Express app
 const app = express();
@@ -67,6 +84,8 @@ let transport = null;
 app.get("/mcp/sse", async (req, res) => {
   console.log("[api] MCP: Establishing SSE connection");
   try {
+    initializeGenkitIfNeeded(); // Initialize on first request
+
     // Dynamic import for ES module
     const { SSEServerTransport } = await import(
       "@modelcontextprotocol/sdk/server/sse.js"
@@ -89,6 +108,8 @@ app.get("/mcp/sse", async (req, res) => {
  */
 app.post("/mcp/messages", (req, res) => {
   console.log("[api] MCP: Received message");
+  initializeGenkitIfNeeded(); // Ensure initialized
+
   if (transport) {
     transport.handlePostMessage(req, res);
   } else {
