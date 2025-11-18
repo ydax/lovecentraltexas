@@ -12,10 +12,95 @@ service cloud.firestore {
       return isAuthenticated() && request.auth.uid == userId;
     }
 
+    // Helper function to validate Central Texas coordinates
+    function isValidCentralTexasCoordinates(lat, lng) {
+      return lat >= 29.0 && lat <= 31.0 && lng >= -99.0 && lng <= -97.0;
+    }
+
+    // Helper function to validate property status
+    function isValidStatus(status) {
+      return status in ['active', 'pending', 'sold', 'off-market'];
+    }
+
+    // Helper function to validate required property fields
+    function hasRequiredPropertyFields() {
+      return request.resource.data.keys().hasAll(['source', 'price', 'status', 'createdAt', 'updatedAt']) &&
+             request.resource.data.address.keys().hasAll(['county']) &&
+             request.resource.data.price is number &&
+             request.resource.data.price > 0 &&
+             isValidStatus(request.resource.data.status);
+    }
+
     // Users collection - users can read/write their own data
     match /users/{userId} {
       allow read: if isOwner(userId);
       allow write: if isOwner(userId);
+    }
+
+    // Land Parcels collection - public read, authenticated write
+    match /landParcels/{parcelId} {
+      allow read: if true; // Public read for SEO pages
+      allow create: if isAuthenticated() && 
+                       hasRequiredPropertyFields() &&
+                       isValidCentralTexasCoordinates(
+                         request.resource.data.address.coordinates.latitude,
+                         request.resource.data.address.coordinates.longitude
+                       );
+      allow update: if isAuthenticated() &&
+                       hasRequiredPropertyFields() &&
+                       isValidCentralTexasCoordinates(
+                         request.resource.data.address.coordinates.latitude,
+                         request.resource.data.address.coordinates.longitude
+                       );
+      allow delete: if false; // Never delete, mark as off-market instead
+    }
+
+    // Commercial Properties collection - public read, authenticated write
+    match /commercialProperties/{propertyId} {
+      allow read: if true; // Public read for SEO pages
+      allow create: if isAuthenticated() && 
+                       hasRequiredPropertyFields() &&
+                       isValidCentralTexasCoordinates(
+                         request.resource.data.address.coordinates.latitude,
+                         request.resource.data.address.coordinates.longitude
+                       );
+      allow update: if isAuthenticated() &&
+                       hasRequiredPropertyFields() &&
+                       isValidCentralTexasCoordinates(
+                         request.resource.data.address.coordinates.latitude,
+                         request.resource.data.address.coordinates.longitude
+                       );
+      allow delete: if false; // Never delete, mark as off-market instead
+    }
+
+    // Residential Luxury Properties collection - public read, authenticated write
+    match /residentialLuxuryProperties/{propertyId} {
+      allow read: if true; // Public read for SEO pages
+      allow create: if isAuthenticated() && 
+                       hasRequiredPropertyFields() &&
+                       isValidCentralTexasCoordinates(
+                         request.resource.data.address.coordinates.latitude,
+                         request.resource.data.address.coordinates.longitude
+                       );
+      allow update: if isAuthenticated() &&
+                       hasRequiredPropertyFields() &&
+                       isValidCentralTexasCoordinates(
+                         request.resource.data.address.coordinates.latitude,
+                         request.resource.data.address.coordinates.longitude
+                       );
+      allow delete: if false; // Never delete, mark as off-market instead
+    }
+
+    // Geographic Metadata collection - public read, authenticated write
+    match /geographicMetadata/{geoId} {
+      allow read: if true; // Public read for SEO pages
+      allow write: if isAuthenticated();
+    }
+
+    // Market Trends collection - public read, authenticated write
+    match /marketTrends/{trendId} {
+      allow read: if true; // Public read for market insights
+      allow write: if isAuthenticated();
     }
 
     // Default deny all other access
