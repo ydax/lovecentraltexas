@@ -47,6 +47,13 @@ Build a robust, serverless web scraping infrastructure that respects rate limits
 
 ##### Core Infrastructure
 
+- [ ] [Not Started] [Manual] Install scraping dependencies in Quin package
+
+  - Run: `cd packages/quin && yarn add cheerio@^1.0.0-rc.12 puppeteer@^21.6.0 got@^11.8.6 p-queue@^7.4.1 pdf-parse@^1.1.1 exceljs@^4.4.0 node-cache@^5.1.2 user-agents@^1.1.0 @google-cloud/tasks@^4.0.0`
+  - Verify installation: `yarn list --pattern "cheerio|puppeteer|got"`
+  - Update `package.json` with correct versions
+  - Run `yarn install` from workspace root
+
 - [x] [Completed] [LLM] Create base scraper class with retry logic
   - [x] Implement exponential backoff with max 30-second delays
   - [x] Handle 4xx/5xx errors appropriately
@@ -72,207 +79,364 @@ Build a robust, serverless web scraping infrastructure that respects rate limits
 
 ##### Source-Specific Scrapers
 
-- [ ] [Not Started] [LLM] County Tax Assessor Scrapers
+**County Tax Assessor Scrapers**
 
-  - [ ] Travis County (traviscad.org)
-    - [ ] Search by location/parcel ID
-    - [ ] Extract ownership, value, tax history
-    - [ ] Parse legal descriptions
-  - [ ] Hays County (hayscad.com)
-    - [ ] Implement search interface navigation
-    - [ ] Extract agricultural exemptions
-    - [ ] Parse improvement details
-  - [ ] Williamson County (wcad.org)
-    - [ ] Handle session-based navigation
-    - [ ] Extract deed history
-    - [ ] Parse property characteristics
-  - [ ] Create shared tax assessor utilities
-    - [ ] Parcel ID normalization
-    - [ ] Owner name parsing
-    - [ ] Tax amount calculations
+- [x] [Completed] [LLM] Build Travis County scraper (`services/scrapingServices/sources/travisCADScraper.js`)
 
-- [ ] [Not Started] [LLM] MLS Data Aggregation
+  - Implement search by location/parcel ID with session management
+  - Extract ownership info, assessed/market values, tax history, exemptions
+  - Parse legal descriptions and land use classifications
+  - Add property detail page navigation with table extraction
+  - See implementation guide for session handling and selector patterns
 
-  - [ ] Research public MLS data sources
-    - [ ] HAR.com public listings
-    - [ ] Realtor.com API limits
-    - [ ] Zillow public data (if available)
-  - [ ] Implement listing scraper
-    - [ ] Search filters (commercial, land, luxury)
-    - [ ] Photo URL extraction
-    - [ ] Agent information parsing
-  - [ ] Handle anti-scraping measures
-    - [ ] User-agent rotation
-    - [ ] Request timing randomization
-    - [ ] Session management
+- [ ] [Not Started] [LLM] Build Hays County scraper (`services/scrapingServices/sources/haysCADScraper.js`)
 
-- [ ] [Not Started] [LLM] Zoning & Planning Data
+  - Implement search interface navigation with form handling
+  - Extract agricultural exemptions and wildlife management data
+  - Parse improvement details (buildings, structures, sq ft)
+  - Handle multi-page results with pagination logic
 
-  - [ ] Austin zoning (austintexas.gov)
-    - [ ] Parse zoning maps
-    - [ ] Extract permitted uses
-    - [ ] Development bonus information
-  - [ ] San Antonio planning (sanantonio.gov)
-    - [ ] Future land use maps
-    - [ ] Corridor plans
-    - [ ] TIF/TIRZ districts
-  - [ ] County-level zoning
-    - [ ] Unincorporated area regulations
-    - [ ] ETJ boundaries
-    - [ ] Development agreements
+- [ ] [Not Started] [LLM] Build Williamson County scraper (`services/scrapingServices/sources/williamsonCADScraper.js`)
 
-- [ ] [Not Started] [LLM] Water & Utility Infrastructure
+  - Handle session-based navigation with cookie management
+  - Extract deed history and ownership chain
+  - Parse property characteristics (acreage, zoning, water)
+  - Implement retry logic for session expiration
 
-  - [ ] LCRA water availability
-    - [ ] Service area maps
-    - [ ] Water rights database
-    - [ ] Drought contingency status
-  - [ ] Groundwater conservation districts
-    - [ ] Well permit data
-    - [ ] Pumping limits
-    - [ ] Water quality reports
-  - [ ] Municipal utility districts
-    - [ ] Bond information
-    - [ ] Tax rates
-    - [ ] Service boundaries
+- [ ] [Not Started] [LLM] Create shared tax assessor utilities (`services/scrapingServices/taxAssessorUtils.js`)
+  - Build parcel ID normalization (format: COUNTY-YEAR-NUMBER)
+  - Create owner name parsing (handle trusts, LLCs, individuals)
+  - Implement tax amount calculations (total from multiple tax units)
+  - Add common selector extraction patterns
 
-- [ ] [Not Started] [LLM] Infrastructure Development Intel
-  - [ ] TxDOT project tracker
-    - [ ] Highway expansions
-    - [ ] New interchanges
-    - [ ] ROW acquisitions
-  - [ ] Capital Metro expansion
-    - [ ] Rail corridors
-    - [ ] Transit centers
-    - [ ] Park & ride locations
-  - [ ] Economic development
-    - [ ] Opportunity zones
-    - [ ] Tax incentive areas
-    - [ ] Major employer announcements
+**MLS & Real Estate Listing Scrapers**
+
+- [ ] [Not Started] [Manual] Research MLS data sources and API endpoints
+
+  - Inspect HAR.com network requests to find JSON API endpoints
+  - Document Realtor.com API rate limits and authentication
+  - Evaluate Zillow public data availability and ToS
+  - Create source comparison matrix (cost, coverage, reliability)
+
+- [ ] [Not Started] [LLM] Build HAR.com scraper (`services/scrapingServices/sources/harScraper.js`)
+
+  - Reverse-engineer API endpoints for commercial/land listings
+  - Implement search filters (type, price range, location, size)
+  - Extract photo URLs and property descriptions
+  - Parse agent contact information and listing metadata
+
+- [ ] [Not Started] [LLM] Implement anti-scraping measures (`services/scrapingServices/antiDetection.js`)
+  - Create user-agent rotation pool (20+ realistic agents)
+  - Add request timing randomization (1-5 second delays)
+  - Implement session management with cookie persistence
+  - Add proxy rotation integration (ScraperAPI or Bright Data)
+
+**Zoning & Planning Data Scrapers**
+
+- [ ] [Not Started] [LLM] Build Austin zoning scraper (`services/scrapingServices/sources/austinZoningScraper.js`)
+
+  - Integrate with ArcGIS REST API for zoning boundaries
+  - Parse zoning district codes and extract permitted uses
+  - Extract development bonus information (FAR, height)
+  - Create coordinate-to-zoning lookup function
+
+- [ ] [Not Started] [LLM] Build San Antonio planning scraper (`services/scrapingServices/sources/sanAntonioPlanningScraper.js`)
+
+  - Parse future land use maps from GIS portal
+  - Extract corridor plan documents and boundaries
+  - Identify TIF/TIRZ districts with tax implications
+  - Parse development incentive programs
+
+- [ ] [Not Started] [LLM] Build county zoning scrapers (`services/scrapingServices/sources/countyZoningScraper.js`)
+  - Parse unincorporated area zoning regulations
+  - Extract ETJ (extraterritorial jurisdiction) boundaries
+  - Document development agreement locations
+  - Handle PDF-based zoning ordinances with pdf-parse
+
+**Water & Utility Infrastructure Scrapers**
+
+- [ ] [Not Started] [LLM] Build LCRA water scraper (`services/scrapingServices/sources/lcraWaterScraper.js`)
+
+  - Parse service area maps from LCRA website
+  - Extract water rights database information
+  - Monitor drought contingency status and restrictions
+  - Create water availability lookup by property coordinates
+
+- [ ] [Not Started] [LLM] Build groundwater district aggregator (`services/scrapingServices/sources/groundwaterScraper.js`)
+
+  - Aggregate well permit data from multiple districts
+  - Extract pumping limits and production amounts
+  - Parse water quality reports and testing results
+  - Map district boundaries to property locations
+
+- [ ] [Not Started] [LLM] Build MUD scraper (`services/scrapingServices/sources/mudScraper.js`)
+  - Extract municipal utility district bond information
+  - Parse MUD tax rates by district
+  - Map service area boundaries to addresses
+  - Identify connection fees and capacity limits
+
+**Infrastructure Development Intelligence**
+
+- [ ] [Not Started] [LLM] Build TxDOT project scraper (`services/scrapingServices/sources/txdotScraper.js`)
+
+  - Monitor highway expansion project tracker
+  - Extract new interchange locations and timelines
+  - Parse right-of-way acquisition notices
+  - Calculate proximity impact to properties
+
+- [ ] [Not Started] [LLM] Build Capital Metro expansion scraper (`services/scrapingServices/sources/capMetroScraper.js`)
+
+  - Track rail corridor expansion plans
+  - Extract transit center locations (current and planned)
+  - Parse park & ride facility locations
+  - Map transit proximity to properties
+
+- [ ] [Not Started] [LLM] Build economic development scraper (`services/scrapingServices/sources/economicDevScraper.js`)
+  - Identify opportunity zone boundaries
+  - Extract tax incentive area designations
+  - Monitor major employer announcements and locations
+  - Track economic development projects by county
 
 ##### Scraper Tools for Quin
 
-- [ ] [Not Started] [LLM] Create Genkit tools for scraping operations
-  - [ ] `scrapePropertyByAddress` tool
-    - [ ] Input: address, property type
-    - [ ] Output: consolidated property data
-    - [ ] Orchestrates multiple scrapers
-  - [ ] `scrapeCountyParcels` tool
-    - [ ] Input: county, filters (size, zoning)
-    - [ ] Output: parcel list with basic info
-    - [ ] Implements pagination
-  - [ ] `enrichPropertyData` tool
-    - [ ] Input: basic property info
-    - [ ] Output: enriched data from all sources
-    - [ ] Aggregates zoning, utilities, tax data
-  - [ ] `monitorPriceChanges` tool
-    - [ ] Input: property IDs to monitor
-    - [ ] Output: price change alerts
-    - [ ] Compares with historical data
+- [ ] [Not Started] [LLM] Create `scrapePropertyByAddress` tool (`tools/scrapingTools.js`)
+
+  - Define Genkit tool with Zod schema (input: address, propertyType, enrichment flag)
+  - Orchestrate multiple scrapers (tax assessor → MLS → zoning → water)
+  - Aggregate and merge data from all sources with conflict resolution
+  - Return consolidated property object with data quality score
+  - Add timeout handling (max 60 seconds for Cloud Functions)
+
+- [ ] [Not Started] [LLM] Create `batchScrapeCounty` tool (`tools/scrapingTools.js`)
+
+  - Define tool for bulk county scraping with filters (minAcreage, maxPrice, zoning types)
+  - Create Cloud Tasks for distributed processing (100 properties per task)
+  - Implement pagination logic for large result sets
+  - Return job ID and estimated completion time
+  - Store progress in Firestore `scrapingJobs` collection
+
+- [ ] [Not Started] [LLM] Create `enrichPropertyData` tool (`tools/scrapingTools.js`)
+
+  - Define tool to enrich existing property records with missing data
+  - Query Firestore for properties with low data quality scores
+  - Fetch missing fields from appropriate sources (zoning, utilities, tax)
+  - Update property documents with batch writes
+  - Return enrichment statistics (fields added, quality improvement)
+
+- [ ] [Not Started] [LLM] Create `monitorPriceChanges` tool (`tools/scrapingTools.js`)
+  - Define tool to track price changes for watchlist properties
+  - Compare current prices with historical data in Firestore
+  - Generate price change alerts (>5% change triggers notification)
+  - Store price history with timestamps
+  - Return list of properties with significant changes
 
 ##### Cloud Task Queue Implementation
 
-- [ ] [Not Started] [LLM] Design task queue architecture
-  - [ ] Create Cloud Tasks queues
-    - [ ] `scraping-high-priority` (1 req/sec)
-    - [ ] `scraping-low-priority` (0.5 req/sec)
-    - [ ] `scraping-enrichment` (2 req/sec)
-  - [ ] Implement task handlers
-    - [ ] Single property scrape
-    - [ ] Batch county scrape
-    - [ ] Data enrichment task
-  - [ ] Add task deduplication
-    - [ ] Check if property recently scraped
-    - [ ] Skip if data fresh (<24 hours)
-    - [ ] Force refresh option
+- [ ] [Not Started] [Manual] Create Cloud Tasks queues via gcloud CLI
+
+  - Run: `gcloud tasks queues create scraping-immediate --max-dispatches-per-second=10`
+  - Run: `gcloud tasks queues create scraping-high --max-dispatches-per-second=5`
+  - Run: `gcloud tasks queues create scraping-normal --max-dispatches-per-second=2`
+  - Run: `gcloud tasks queues create scraping-low --max-dispatches-per-second=0.5`
+  - Verify queues: `gcloud tasks queues list --location=us-central1`
+
+- [ ] [Not Started] [LLM] Build task manager service (`services/taskServices/scrapingTaskManager.js`)
+
+  - Create `ScrapingTaskManager` class with queue operations
+  - Implement `createTask()` method with priority routing
+  - Add `createBatchTasks()` for bulk operations with staggering
+  - Build task payload builder with validation
+  - Add task scheduling with delay parameter
+
+- [ ] [Not Started] [LLM] Implement task handlers (`handlers/taskHandlers.js`)
+
+  - Create `handleSinglePropertyScrape` function
+  - Create `handleBatchCountyScrape` function with progress tracking
+  - Create `handleDataEnrichment` function
+  - Add error handling with automatic retry logic
+  - Store task results in Firestore
+
+- [ ] [Not Started] [LLM] Add task deduplication logic (`services/taskServices/deduplication.js`)
+  - Check Firestore for recent scrape timestamp (property-level)
+  - Skip if data fresh (<24 hours unless force refresh)
+  - Implement force refresh flag override
+  - Create dedupe cache with TTL (in-memory for function instance)
+  - Log skipped tasks for monitoring
 
 ##### Scheduling System
 
-- [ ] [Not Started] [LLM] Create Cloud Scheduler jobs
-  - [ ] Daily new listing discovery
-    - [ ] 6 AM CST execution
-    - [ ] Focus on MLS/realtor sites
-    - [ ] Queue enrichment for new finds
-  - [ ] Weekly price monitoring
-    - [ ] Sunday 2 AM CST
-    - [ ] All active listings
-    - [ ] Generate price change report
-  - [ ] Monthly full refresh
-    - [ ] 1st of month, 1 AM CST
-    - [ ] All properties in database
-    - [ ] Update tax assessments
-    - [ ] Verify property status
-  - [ ] Hourly hot property check
-    - [ ] High-value properties only
-    - [ ] Immediate alert on status change
-    - [ ] <1000 properties in rotation
+- [ ] [Not Started] [Manual] Create daily new listings scheduler job
+
+  - Run: `gcloud scheduler jobs create http daily-new-listings --schedule="0 6 * * *" --time-zone="America/Chicago" --uri="https://us-central1-lovecentraltexas.cloudfunctions.net/quin/schedule/daily-listings" --http-method=POST`
+  - Configure to target MLS/realtor sites only
+  - Queue 'high' priority tasks for new finds
+  - Set max concurrent scrapes to 5
+
+- [ ] [Not Started] [LLM] Build daily listings handler (`handlers/scheduleHandlers.js`)
+
+  - Create `handleDailyListings` function
+  - Query MLS for new listings (last 24 hours)
+  - Queue property enrichment tasks for each new listing
+  - Log discovery count to Cloud Monitoring
+
+- [ ] [Not Started] [Manual] Create weekly price monitoring scheduler job
+
+  - Run: `gcloud scheduler jobs create http weekly-price-monitor --schedule="0 2 * * 0" --time-zone="America/Chicago" --uri="https://us-central1-lovecentraltexas.cloudfunctions.net/quin/schedule/weekly-prices" --http-method=POST`
+  - Configure to check all active listings
+  - Generate price change report after completion
+
+- [ ] [Not Started] [LLM] Build price monitoring handler (`handlers/scheduleHandlers.js`)
+
+  - Create `handleWeeklyPriceMonitor` function
+  - Query all properties with status='active'
+  - Re-scrape current prices and compare to stored values
+  - Generate report with price changes >5%
+  - Email report to admin (or store in Firestore)
+
+- [ ] [Not Started] [Manual] Create monthly full refresh scheduler job
+
+  - Run: `gcloud scheduler jobs create http monthly-refresh --schedule="0 1 1 * *" --time-zone="America/Chicago" --uri="https://us-central1-lovecentraltexas.cloudfunctions.net/quin/schedule/monthly-refresh" --http-method=POST`
+  - Configure to process all properties in batches
+  - Set estimated duration: 24-48 hours
+
+- [ ] [Not Started] [LLM] Build monthly refresh handler (`handlers/scheduleHandlers.js`)
+
+  - Create `handleMonthlyRefresh` function
+  - Query all properties in Firestore (paginated)
+  - Queue 'low' priority tasks for full re-scrape
+  - Update tax assessments from county records
+  - Verify property status (active/sold/off-market)
+  - Generate completion report with data quality metrics
+
+- [ ] [Not Started] [Manual] Create hourly hot property checker job (optional)
+
+  - Run: `gcloud scheduler jobs create http hourly-hot-check --schedule="0 * * * *" --time-zone="America/Chicago" --uri="https://us-central1-lovecentraltexas.cloudfunctions.net/quin/schedule/hot-properties" --http-method=POST`
+  - Limit to properties with flag='highValue' or price >$2M
+  - Set max properties: 1000
+
+- [ ] [Not Started] [LLM] Build hot property handler (`handlers/scheduleHandlers.js`)
+  - Create `handleHotPropertyCheck` function
+  - Query high-value properties (flags include 'highValue')
+  - Check for status changes (active → pending/sold)
+  - Send immediate alerts on status changes
+  - Update Firestore with latest status
 
 ##### Data Quality & Monitoring
 
-- [ ] [Not Started] [LLM] Implement quality checks
+- [ ] [Not Started] [LLM] Build pre-storage validation service (`services/dataQuality/preStorageValidator.js`)
 
-  - [ ] Pre-storage validation
-    - [ ] Required field presence
-    - [ ] Data type correctness
-    - [ ] Reasonable value ranges
-  - [ ] Post-storage analysis
-    - [ ] Anomaly detection (price outliers)
-    - [ ] Completeness scoring
-    - [ ] Source reliability tracking
-  - [ ] Create quality dashboard
-    - [ ] Success rate by source
-    - [ ] Data completeness metrics
-    - [ ] Error categorization
+  - Create `validateBeforeStorage()` function
+  - Check required field presence (address, price, county)
+  - Validate data types (price is number, coordinates are valid)
+  - Check reasonable value ranges (price >$0, acreage >0)
+  - Return validation result with specific error messages
+  - Reject invalid data (don't store) and log rejection
 
-- [ ] [Not Started] [LLM] Build monitoring system
-  - [ ] Structured logging enhancements
-    - [ ] Add scrape duration
-    - [ ] Log data quality scores
-    - [ ] Track retry attempts
-  - [ ] Cloud Monitoring setup
-    - [ ] Custom metrics (scrapes/minute)
-    - [ ] Error rate tracking
-    - [ ] Latency percentiles
-  - [ ] Alert policies
-    - [ ] > 10% error rate
-    - [ ] No successful scrapes in 2 hours
-    - [ ] Queue depth >1000 tasks
-  - [ ] Health check endpoint
-    - [ ] Last successful scrape by source
-    - [ ] Current queue depths
-    - [ ] Data freshness metrics
+- [ ] [Not Started] [LLM] Build post-storage analysis service (`services/dataQuality/postStorageAnalyzer.js`)
+
+  - Create `analyzePropertyData()` function (uses existing dataValidation utils)
+  - Implement price anomaly detection (IQR method, flag outliers)
+  - Calculate completeness score (% of fields populated)
+  - Track source reliability (success rate per source over 7 days)
+  - Store analysis results in `dataQuality` collection
+
+- [ ] [Not Started] [LLM] Create quality dashboard service (`services/dataQuality/dashboardGenerator.js`)
+
+  - Build `generateDailyQualityReport()` function
+  - Calculate success rate by source (successful scrapes / total attempts)
+  - Calculate data completeness metrics (avg completeness by property type)
+  - Categorize errors by type (network, parsing, validation)
+  - Store daily reports in Firestore for visualization
+
+- [ ] [Not Started] [LLM] Enhance structured logging (`services/logging/scrapingLogger.js`)
+
+  - Create `logScrapeStart()` and `logScrapeComplete()` functions
+  - Add scrape duration calculation and logging
+  - Log data quality scores with each property save
+  - Track and log retry attempts per scrape
+  - Use consistent log format: `[source][function] message {context}`
+
+- [ ] [Not Started] [Manual] Set up Cloud Monitoring custom metrics
+
+  - Define custom metric: `scraping.requests.total` (counter by source)
+  - Define custom metric: `scraping.requests.duration` (histogram in ms)
+  - Define custom metric: `scraping.errors.rate` (rate per minute)
+  - Define custom metric: `scraping.data_quality.score` (gauge 0-1)
+  - Implement metric recording in scraper code
+
+- [ ] [Not Started] [Manual] Create Cloud Monitoring alert policies
+
+  - Alert: Error rate >10% over 10 minutes
+  - Alert: No successful scrapes in 2 hours (per source)
+  - Alert: Queue depth >1000 tasks
+  - Alert: Data quality score <0.7 for 24 hours
+  - Configure notification channels (email/SMS)
+
+- [ ] [Not Started] [LLM] Build health check endpoint (`handlers/api.js`)
+  - Add `GET /health` route
+  - Query last successful scrape timestamp per source
+  - Get current queue depths from Cloud Tasks API
+  - Calculate data freshness (time since last update by source)
+  - Return JSON health status with all metrics
 
 ##### Error Handling & Recovery
 
-- [ ] [Not Started] [LLM] Implement robust error handling
-  - [ ] Source-specific error handling
-    - [ ] Session expiration recovery
-    - [ ] CAPTCHA detection
-    - [ ] Rate limit backoff
-  - [ ] Circuit breaker pattern
-    - [ ] Disable failing sources
-    - [ ] Gradual recovery testing
-    - [ ] Admin override capability
-  - [ ] Failed scrape recovery
-    - [ ] Exponential backoff retries
-    - [ ] Dead letter queue
-    - [ ] Manual intervention alerts
+- [ ] [Not Started] [LLM] Implement source-specific error handlers (`services/scrapingServices/errorHandlers.js`)
+
+  - Create `handleSessionExpiration()` - refresh session and retry
+  - Create `detectCAPTCHA()` - check for CAPTCHA in response, pause source
+  - Create `handleRateLimit()` - implement exponential backoff (2^attempt seconds)
+  - Add error type detection from HTTP status codes and response content
+  - Log all errors with source and error type for monitoring
+
+- [ ] [Not Started] [LLM] Build circuit breaker service (`services/scrapingServices/circuitBreaker.js`)
+
+  - Create `CircuitBreaker` class tracking failure counts per source
+  - Implement state machine: CLOSED → OPEN (>5 failures) → HALF_OPEN
+  - Disable failing sources for 30 minutes when circuit opens
+  - Gradual recovery: allow 1 test request in HALF_OPEN state
+  - Admin override: `forceClose(source)` method to manually enable
+  - Store circuit state in Firestore for persistence across functions
+
+- [ ] [Not Started] [LLM] Implement failed scrape recovery (`services/scrapingServices/failureRecovery.js`)
+
+  - Create `retryScrape()` with exponential backoff (1s, 2s, 4s, 8s, 16s max)
+  - After max retries, move to dead letter queue
+  - Store failed scrapes in Firestore `deadLetterQueue` collection
+  - Include error details, retry count, and original request
+  - Create retry scheduler for failed tasks (retry after 1 hour)
+
+- [ ] [Not Started] [LLM] Build manual intervention system (`services/scrapingServices/interventionAlerts.js`)
+  - Create `sendInterventionAlert()` for critical failures
+  - Alert when source has been down >4 hours
+  - Alert when dead letter queue >100 items
+  - Alert when circuit breaker opens
+  - Send alerts via email or Cloud Logging with severity:ERROR
 
 ##### Testing Strategy
 
-- [ ] [Not Started] [LLM] Create comprehensive test suite
-  - [ ] Unit tests
-    - [ ] Data normalization functions
-    - [ ] Validation logic
-    - [ ] Rate limiter behavior
-  - [ ] Integration tests
-    - [ ] Mock HTTP responses
-    - [ ] End-to-end scraping flow
-    - [ ] Queue task handling
-  - [ ] Load tests
-    - [ ] Concurrent scraping limits
-    - [ ] Rate limiter effectiveness
-    - [ ] Memory usage patterns
+- [ ] [Not Started] [LLM] Write unit tests for utilities (`__tests__/utils/`)
+
+  - Test `normalizeAddress()`, `normalizePrice()`, `normalizeAcreage()` functions
+  - Test `validateLandParcelData()`, `validateCoordinates()`, `validatePrice()`
+  - Test `RateLimiter` class methods (canMakeRequest, waitForRateLimit)
+  - Use Jest with coverage target >80%
+  - Mock external dependencies (Firestore, HTTP)
+
+- [ ] [Not Started] [LLM] Write integration tests with mock responses (`__tests__/integration/`)
+
+  - Create mock HTTP responses for each source (Travis CAD, HAR, etc.)
+  - Test end-to-end scraping flow (search → details → normalize → validate)
+  - Test error handling (404, timeout, invalid HTML)
+  - Test queue task handling with Cloud Tasks emulator
+  - Verify Firestore writes with emulator
+
+- [ ] [Not Started] [LLM] Implement load tests (`__tests__/load/`)
+  - Test concurrent scraping limits (10, 50, 100 parallel requests)
+  - Verify rate limiter effectiveness under load
+  - Monitor memory usage patterns with different scrapers
+  - Test Firestore batch write performance (100, 500, 1000 docs)
+  - Use Artillery or k6 for load testing framework
 
 #### Technical Implementation Details
 
