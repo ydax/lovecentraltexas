@@ -89,7 +89,7 @@ Build a robust, serverless web scraping infrastructure that respects rate limits
   - Add property detail page navigation with table extraction
   - See implementation guide for session handling and selector patterns
 
-- [ ] [Not Started] [LLM] Build Hays County scraper (`services/scrapingServices/sources/haysCADScraper.js`)
+- [x] [Completed] [LLM] Build Hays County scraper (`services/scrapingServices/sources/haysCADScraper.js`)
 
   - Implement search interface navigation with form handling
   - Extract agricultural exemptions and wildlife management data
