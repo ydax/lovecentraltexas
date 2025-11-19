@@ -96,7 +96,7 @@ Build a robust, serverless web scraping infrastructure that respects rate limits
   - Parse improvement details (buildings, structures, sq ft)
   - Handle multi-page results with pagination logic
 
-- [ ] [Not Started] [LLM] Build Williamson County scraper (`services/scrapingServices/sources/williamsonCADScraper.js`)
+- [x] [Completed] [LLM] Build Williamson County scraper (`services/scrapingServices/sources/williamsonCADScraper.js`)
 
   - Handle session-based navigation with cookie management
   - Extract deed history and ownership chain

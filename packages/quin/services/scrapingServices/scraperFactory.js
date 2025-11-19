@@ -4,8 +4,9 @@
  */
 
 const { BaseScraper } = require("./baseScraper");
-const TravisCADScraper = require("./sources/travisCADScraper");
-const HaysCADScraper = require("./sources/haysCADScraper");
+const { TravisCADScraper } = require("./sources/travisCADScraper");
+const { HaysCADScraper } = require("./sources/haysCADScraper");
+const { WilliamsonCADScraper } = require("./sources/williamsonCADScraper");
 const MLSScraper = require("./sources/mlsScraper");
 const ZoningScraper = require("./sources/zoningScraper");
 
@@ -15,6 +16,7 @@ const ZoningScraper = require("./sources/zoningScraper");
 const scraperRegistry = {
   traviscad: TravisCADScraper,
   hayscad: HaysCADScraper,
+  williamsoncad: WilliamsonCADScraper,
   mls: MLSScraper,
   zoning: ZoningScraper,
 };
