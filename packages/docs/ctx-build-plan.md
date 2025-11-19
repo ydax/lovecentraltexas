@@ -103,7 +103,7 @@ Build a robust, serverless web scraping infrastructure that respects rate limits
   - Parse property characteristics (acreage, zoning, water)
   - Implement retry logic for session expiration
 
-- [ ] [Not Started] [LLM] Create shared tax assessor utilities (`services/scrapingServices/taxAssessorUtils.js`)
+- [x] [Completed] [LLM] Create shared tax assessor utilities (`services/scrapingServices/taxAssessorUtils.js`)
   - Build parcel ID normalization (format: COUNTY-YEAR-NUMBER)
   - Create owner name parsing (handle trusts, LLCs, individuals)
   - Implement tax amount calculations (total from multiple tax units)
