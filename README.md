@@ -2,6 +2,26 @@
 
 A yarn workspace monorepo containing a NextJS React app and Quin (a Genkit/MCP AI agent), both deployed on Firebase.
 
+## Strategic Direction: The Central Texas Infrastructure Engine
+
+**CentralTexas.com is an Infrastructure & Asset Liquidity Engine.**
+
+We have pivoted from a "community hub" model to a high-leverage lead generation monopoly for high-asset-value transactions. The strategy exploits the booming economic corridor between Austin and San Antonio (one of the fastest-growing in the Western Hemisphere) by leveraging domain authority and programmatic SEO.
+
+### Core Business Model
+
+- **The Asset:** `CentralTexas.com` - A geo-premium domain that implies utility-level authority.
+- **The Mechanism:** **Programmatic SEO Cannon.** We auto-generate thousands of high-quality, data-rich landing pages targeting specific high-intent queries (e.g., "Industrial land with water rights in Hays County").
+- **The Monetization:** **High-Ticket Arbitrage.** We do not sell low-margin ads. We capture high-intent leads for:
+  - Commercial Real Estate & Land Acquisition
+  - Luxury Residential
+  - Commercial Solar Installation
+  - High-Ticket Infrastructure Services
+- **The Revenue:** **25-30% Referral Fees** on closed deals. A single commercial land deal can generate $25k-30k in pure margin.
+- **The Mantra:** Zero Inventory. Zero Staff. High Leverage.
+
+For the detailed build plan, see: [`packages/docs/infrastructure-engine-build-plan.md`](packages/docs/infrastructure-engine-build-plan.md)
+
 ## Project Information
 
 - **Project Name:** Love Central Texas
